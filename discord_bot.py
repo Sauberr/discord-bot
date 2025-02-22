@@ -13,7 +13,7 @@ intents.message_content = True
 client = commands.Bot(command_prefix='!', intents=intents)
 client.remove_command('help')
 
-#Bot Status
+
 @client.event
 async def on_ready():
     await client.tree.sync()
@@ -22,29 +22,24 @@ async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=discord.Game('!help'))
 
 
-# SLash Commands
 @client.tree.command(name='ping', description="Shows bot's latency in ms ")
 async def ping(interaction:discord.Interaction):
     bot_latency = round(client.latency * 1000)
     await interaction.response.send_message(f"Pong {bot_latency} ms.")
 
 
-
-# Hi
 @client.command()
 async def hi(ctx:commands.Context):
     author = ctx.message.author
     await ctx.send(f" **{author}** Hi, I'm a bot at this Discord Server.")
 
-# Clear message
-    @client.command()
-    @commands.has_permissions(administrator=True)
-    async def clear(ctx, amount=11):
-        await ctx.channel.purge(limit=amount)
+
+@client.command()
+@commands.has_permissions(administrator=True)
+async def clear(ctx, amount=11):
+    await ctx.channel.purge(limit=amount)
 
 
-
-# Kick
 @client.command()
 @commands.has_permissions(administrator=True)
 async def kick(ctx, member:discord.Member, *, reason=None):
@@ -54,7 +49,7 @@ async def kick(ctx, member:discord.Member, *, reason=None):
     emb.add_field(name='Reason', value='Not specified')
     await ctx.send(embed=emb)
 
-# Ban
+
 @client.command()
 @commands.has_permissions(administrator=True)
 async def ban(ctx, member:discord.Member, *, reason=None):
@@ -65,7 +60,6 @@ async def ban(ctx, member:discord.Member, *, reason=None):
     await ctx.send(embed=emb)
 
 
-# Unban
 @client.command()
 @commands.has_permissions(ban_members=True)
 async def unban(ctx, *, id):
@@ -79,7 +73,7 @@ async def unban(ctx, *, id):
         emb = discord.Embed(title='Error!', description=f'This user is not banned or I do not have enough rights to execute this command!', color=discord.Color(value=int('FF8C00', 16)))
         await ctx.send(embed=emb)
 
-# Catching errors
+
 @client.event
 async def on_command_error(ctx, error):
     emb = discord.Embed(title='Not enough rights', colour=discord.Color.orange())
@@ -91,7 +85,7 @@ async def on_command_error(ctx, error):
     embed.set_footer(text="Please contact the developer to fix this bug.")
     await ctx.send(embed=embed)
 
-# Help
+
 @client.command()
 @commands.has_permissions(administrator=True)
 async def help(ctx):
@@ -109,7 +103,7 @@ async def help(ctx):
     emb.add_field(name='**Userinfo**', value='UserInformation', inline=False)
     await ctx.send(embed=emb)
 
-#Mute
+
 @client.command(aliases=["m"])
 @commands.has_permissions(manage_messages=True)
 async def mute(ctx, member: discord.Member, arg: str = None, *, reason=None):
@@ -219,7 +213,7 @@ async def mute(ctx, member: discord.Member, arg: str = None, *, reason=None):
         await asyncio.sleep(amount * 86400)
         await member.remove_roles(muterole)
 
-# Unmute
+
 @client.command()
 @commands.has_permissions(administrator=True)
 async def unmute(ctx, member: discord.Member):
@@ -229,7 +223,7 @@ async def unmute(ctx, member: discord.Member):
     emb.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
     await ctx.send(embed=emb)
 
-# Join_number
+
 @client.event
 async def on_member_join(member:discord.Member):
     channel = client.get_channel(776157974179217451)
@@ -238,7 +232,7 @@ async def on_member_join(member:discord.Member):
     await channel.send(embed=emb)
     await member.add_roles(role)
 
-# Duration
+
 class DurationConverter(commands.Converter):
     async def convert(self, ctx, argument):
         amount = argument[:-1]
@@ -249,7 +243,7 @@ class DurationConverter(commands.Converter):
 
         raise commands.BadArgument(message='Not a valid duration')
 
-# Tempban
+
 @client.command()
 async def tempban(ctx, member: commands.MemberConverter, duration:DurationConverter):
     multiplier = {'s': 1, 'm': 60}
@@ -262,14 +256,14 @@ async def tempban(ctx, member: commands.MemberConverter, duration:DurationConver
     await ctx.guild.unban(member)
     await ctx.send(embed=emb)
 
-# Join to member
+
 @client.command()
 async def on_join(ctx, member: discord.Member):
     channel = member.voice.channel
     await channel.connect()
     await ctx.author.move_to(channel)
 
-# Random cats images
+
 @client.command()
 async def cat(ctx):
     cat_api = 'Your key api'
@@ -279,7 +273,7 @@ async def cat(ctx):
     emb.set_image(url=json_data[0]["url"])
     await ctx.send(embed=emb)
 
-# Random dogs images
+
 @client.command()
 async def dog(ctx):
     dog_api = 'Your key api'
@@ -289,7 +283,7 @@ async def dog(ctx):
     emb.set_image(url=json_data[0]['url'])
     await ctx.send(embed=emb)
 
-# UserInfo
+
 @client.command()
 async def userinfo(ctx, member:discord.Member=None):
     if member is None:
@@ -309,5 +303,3 @@ async def userinfo(ctx, member:discord.Member=None):
 
 
 client.run(TOKEN)
-
-
