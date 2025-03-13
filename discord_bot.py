@@ -5,7 +5,7 @@ import asyncio
 from datetime import datetime, timedelta
 import requests
 
-TOKEN = 'Your Token Bot'
+TOKEN: str = 'Your Token Bot'
 
 intents = discord.Intents.all()
 intents.message_content = True
